@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env, envSchema } from './config/env.schema.js';
 import { UsersModule } from './modules/users/users.module.js';
+import { AuthModule } from './modules/auth/auth.module.js';
 
 @Module({
   imports: [
@@ -22,10 +23,11 @@ import { UsersModule } from './modules/users/users.module.js';
         database: config.get('DB_NAME', { infer: true }),
         autoLoadEntities: true,
         synchronize: config.get('NODE_ENV', { infer: true }) !== 'production',
-        logging: false,
+        //logging: true,
       }),
     }),
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

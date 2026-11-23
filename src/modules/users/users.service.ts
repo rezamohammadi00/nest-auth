@@ -45,8 +45,6 @@ export class UsersService {
       where: { id },
       select: {
         id: true,
-        email: true,
-        passwordHash: true,
         refreshTokenHash: true,
       },
     });

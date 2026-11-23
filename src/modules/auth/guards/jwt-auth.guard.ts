@@ -7,14 +7,16 @@ import {
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { IS_PUBLIC_KEY, JwtPayload } from '../../common/decorators.js';
+import { Env } from '../../../config/env.schema.js';
+import type { JwtPayload } from '../../../common/types/jwt-payload.type.js';
+import { IS_PUBLIC_KEY } from '../../../common/decorators/public.decorator.js';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private jwt: JwtService,
     private reflector: Reflector,
-    private config: ConfigService,
+    private config: ConfigService<Env, true>,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -31,7 +33,7 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       req.user = await this.jwt.verifyAsync<JwtPayload>(token, {
-        secret: this.config.get('JWT_ACCESS_SECRET'),
+        secret: this.config.get('JWT_ACCESS_TOKEN_SECRET'),
       });
     } catch {
       throw new UnauthorizedException('Invalid or expired token');

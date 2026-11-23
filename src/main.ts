@@ -1,6 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module.js';
+import { Env } from './config/env.schema.js';
 import { setupSwagger } from './config/swagger.js';
 
 async function bootstrap() {
@@ -24,6 +26,7 @@ async function bootstrap() {
   //Automatically strip @Exclude() fields (e.g., password) from all response objects
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  await app.listen(process.env.PORT ?? 3000);
+  const PORT = app.get(ConfigService<Env, true>).get('PORT', { infer: true });
+  await app.listen(PORT);
 }
 await bootstrap();
