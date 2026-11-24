@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Role } from '../../../config/constants.js';
 
 @Entity('users')
 export class User {
@@ -9,8 +10,8 @@ export class User {
   @Column({ unique: true, length: 255 })
   email: string;
 
-  @Column({ default: 'user' })
-  role: string;
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
+  role: Role;
 
   @Column({ type: 'varchar', nullable: true, select: false })
   @Exclude({ toPlainOnly: true })

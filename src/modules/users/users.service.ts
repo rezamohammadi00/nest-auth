@@ -12,6 +12,10 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
+  list() {
+    return this.usersRepository.find();
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const exists = await this.usersRepository.existsBy({
       email: createUserDto.email,
@@ -25,7 +29,7 @@ export class UsersService {
       ...rest,
       passwordHash,
     });
-    
+
     return this.usersRepository.save(user);
   }
 
@@ -34,8 +38,8 @@ export class UsersService {
       where: { email },
       select: {
         id: true,
-        email: true,
         passwordHash: true,
+        role: true,
       },
     });
   }
@@ -46,6 +50,7 @@ export class UsersService {
       select: {
         id: true,
         refreshTokenHash: true,
+        role: true,
       },
     });
   }
