@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Env } from '../../../config/env.schema.js';
 import type { JwtPayload } from '../../../common/types/jwt-payload.type.js';
-import { IS_PUBLIC_KEY } from '../../../common/decorators/public.decorator.js';
+import { Public } from '../../../common/decorators/public.decorator.js';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -19,8 +19,8 @@ export class JwtAuthGuard implements CanActivate {
     private config: ConfigService<Env, true>,
   ) {}
 
-  async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+  async canActivate(ctx: ExecutionContext) {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(Public, [
       ctx.getHandler(),
       ctx.getClass(),
     ]);

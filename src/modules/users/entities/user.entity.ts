@@ -9,6 +9,9 @@ export class User {
   @Column({ unique: true, length: 255 })
   email: string;
 
+  @Column({ default: 'user' })
+  role: string;
+
   @Column({ type: 'varchar', nullable: true, select: false })
   @Exclude({ toPlainOnly: true })
   refreshTokenHash: string | null;
