@@ -12,6 +12,7 @@ import { RolesGuard } from './guards/roles.guard.js';
   controllers: [AuthController],
   providers: [
     AuthService,
+    // ORDER MATTERS: authenticate first, then authorize
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
