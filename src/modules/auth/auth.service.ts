@@ -15,7 +15,6 @@ import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RefreshTokenDto } from './dto/refresh-token.dto.js';
 
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -104,5 +103,9 @@ export class AuthService {
 
   logout(userId: string) {
     return this.usersService.setRefreshTokenHash(userId, null);
+  }
+
+  getProfile(userId: string) {
+    return this.usersService.findOneById(userId);
   }
 }

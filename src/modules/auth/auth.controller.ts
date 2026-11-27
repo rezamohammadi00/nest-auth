@@ -1,7 +1,9 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { Public } from '../../common/decorators/public.decorator.js';
 import type { JwtPayload } from '../../common/types/jwt-payload.type.js';
+import { User } from '../users/entities/user.entity.js';
 import { AuthService } from './auth.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
@@ -35,7 +37,8 @@ export class AuthController {
   }
 
   @Get('/me')
-  me(@CurrentUser() user: JwtPayload) {
-    return user;
+  @ApiOkResponse({ type: User })
+  getProfile(@CurrentUser() user: JwtPayload) {
+    return this.authService.getProfile(user.sub);
   }
 }

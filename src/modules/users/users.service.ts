@@ -16,21 +16,8 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const exists = await this.usersRepository.existsBy({
-      email: createUserDto.email,
-    });
-
-    if (exists) throw new ConflictException('Email already registered');
-
-    const { password, ...rest } = createUserDto;
-    const passwordHash = await bcrypt.hash(password, 12);
-    const user = this.usersRepository.create({
-      ...rest,
-      passwordHash,
-    });
-
-    return this.usersRepository.save(user);
+  findOneById(id: string) {
+    return this.usersRepository.findOneBy({ id });
   }
 
   findOneByEmailWithPassword(email: string): Promise<User | null> {
@@ -53,6 +40,23 @@ export class UsersService {
         role: true,
       },
     });
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const exists = await this.usersRepository.existsBy({
+      email: createUserDto.email,
+    });
+
+    if (exists) throw new ConflictException('Email already registered');
+
+    const { password, ...rest } = createUserDto;
+    const passwordHash = await bcrypt.hash(password, 12);
+    const user = this.usersRepository.create({
+      ...rest,
+      passwordHash,
+    });
+
+    return this.usersRepository.save(user);
   }
 
   setRefreshTokenHash(userId: string, hash: string | null) {
